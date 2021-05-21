@@ -19,7 +19,7 @@ namespace Catalog.API.Repositories
         Task<IEnumerable<Product>> GetProductByCategory(string category);
 
         // CRUD operations
-        Task CreatedProduct(Product product);
+        Task CreateProduct(Product product);
         Task<bool> UpdateProduct(Product product);
         Task<bool> DeleteProduct(string id);
     }

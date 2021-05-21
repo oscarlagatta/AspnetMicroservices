@@ -52,7 +52,7 @@ namespace Catalog.API.Repositories
                 .ToListAsync();
         }
 
-        public async Task CreatedProduct(Product product)
+        public async Task CreateProduct(Product product)
         {
             await _context.Products.InsertOneAsync(product);
         }

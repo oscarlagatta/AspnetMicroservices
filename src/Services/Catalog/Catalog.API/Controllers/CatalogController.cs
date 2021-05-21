@@ -22,7 +22,6 @@ namespace Catalog.API.Controllers
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<Product>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
@@ -31,16 +30,15 @@ namespace Catalog.API.Controllers
             return Ok(products);
         }
 
-
-        [HttpGet("{id:length(24)", Name = "GetProduct")]
+        [HttpGet("{id:length(24)}", Name = "GetProduct")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(IEnumerable<Product>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProductById(string Id)
+        [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<Product>> GetProductById(string id)
         {
-            var product = await _repository.GetProduct(Id);
+            var product = await _repository.GetProduct(id);
             if (product == null)
             {
-                _logger.LogError($"Product with Id: {Id}, not found.");
+                _logger.LogError($"Product with id: {id}, not found.");
                 return NotFound();
             }
             return Ok(product);
@@ -56,8 +54,8 @@ namespace Catalog.API.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(IEnumerable<Product>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<IEnumerable<Product>>> CreateProduct([FromBody] Product product)
+        [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<Product>> CreateProduct([FromBody] Product product)
         {
             await _repository.CreateProduct(product);
 
@@ -65,17 +63,17 @@ namespace Catalog.API.Controllers
         }
 
         [HttpPut]
-        [ProducesResponseType(typeof(Product), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> UpdateProduct([FromBody] Product product)
         {
             return Ok(await _repository.UpdateProduct(product));
         }
 
-        [HttpDelete]
-        [ProducesResponseType(typeof(IEnumerable<Product>), (int) HttpStatusCode.OK)]
-        public async Task<IActionResult> DeleteProductById(string Id)
+        [HttpDelete("{id:length(24)}", Name = "DeleteProduct")]
+        [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> DeleteProductById(string id)
         {
-            return Ok(await _repository.DeleteProduct(Id));
+            return Ok(await _repository.DeleteProduct(id));
         }
     }
 }
